@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chappr — AI Social Posts for Your Business</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0e0c;
+    --paper: #f5f2eb;
+    --accent: #e8401c;
+    --accent2: #2d5a3d;
+    --muted: #8a8478;
+    --border: #d8d3c8;
+    --card: #fff;
+    --radius: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.1rem 2rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--paper);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.4rem;
+    letter-spacing: -0.5px;
+    color: var(--ink);
+  }
+  .logo span { color: var(--accent); }
+  .nav-badge {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 99px;
+    background: var(--accent2);
+    color: #fff;
+    letter-spacing: 0.02em;
+  }
+
+  /* HERO */
+  .hero {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 4rem 2rem 2.5rem;
+    text-align: center;
+  }
+  .hero-eyebrow {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.2rem;
+    border: 1px solid var(--accent);
+    padding: 4px 14px;
+    border-radius: 99px;
+  }
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -1.5px;
+    margin-bottom: 1.2rem;
+    color: var(--ink);
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--accent);
+    position: relative;
+    display: inline-block;
+  }
+  .hero p {
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 520px;
+    margin: 0 auto 2.5rem;
+    font-weight: 300;
+  }
+
+  /* MAIN CARD */
+  .generator {
+    max-width: 760px;
+    margin: 0 auto 3rem;
+    padding: 0 1.5rem;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 4px 40px rgba(0,0,0,0.06);
+  }
+  .card-header {
+    padding: 1.4rem 1.8rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--ink);
+  }
+  .card-header h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.2px;
+  }
+  .step-dot {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .card-body { padding: 1.8rem; }
+
+  /* FORM */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  @media (max-width: 540px) { .form-grid { grid-template-columns: 1fr; } }
+
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field.full { grid-column: 1 / -1; }
+  label {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  input, select, textarea {
+    background: var(--paper);
+    border: 1.5px solid var(--border);
+    border-radius: 9px;
+    padding: 10px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.15s;
+    width: 100%;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--accent);
+  }
+  textarea { resize: vertical; min-height: 80px; }
+  select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 7L11 1' stroke='%238a8478' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+
+  /* PLATFORM PILLS */
+  .platform-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .platform-pill {
+    padding: 7px 16px;
+    border-radius: 99px;
+    border: 1.5px solid var(--border);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    background: var(--paper);
+    transition: all 0.15s;
+    user-select: none;
+    color: var(--ink);
+  }
+  .platform-pill:hover { border-color: var(--accent); color: var(--accent); }
+  .platform-pill.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  /* GENERATE BTN */
+  .generate-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+    cursor: pointer;
+    margin-top: 1.4rem;
+    transition: opacity 0.15s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .generate-btn:hover { opacity: 0.9; }
+  .generate-btn:active { transform: scale(0.99); }
+  .generate-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* LOADING */
+  .spinner {
+    width: 18px; height: 18px;
+    border: 2.5px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    display: none;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* OUTPUT */
+  #output { margin-top: 2rem; display: none; }
+  .output-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  .output-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .week-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 99px;
+    background: var(--accent2);
+    color: #fff;
+  }
+
+  .post-cards { display: flex; flex-direction: column; gap: 12px; }
+  .post-card {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .post-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    background: var(--card);
+  }
+  .post-day {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .post-platform-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 99px;
+  }
+  .badge-instagram { background: #f3e8ff; color: #7c3aed; }
+  .badge-whatsapp { background: #dcfce7; color: #16a34a; }
+  .badge-facebook { background: #dbeafe; color: #1d4ed8; }
+  .post-content {
+    padding: 14px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--ink);
+    white-space: pre-wrap;
+  }
+  .post-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 8px 14px;
+    border-top: 1px solid var(--border);
+    gap: 8px;
+  }
+  .copy-btn {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 14px;
+    border-radius: 99px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    cursor: pointer;
+    color: var(--ink);
+    transition: all 0.1s;
+  }
+  .copy-btn:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .copy-btn.copied { background: var(--accent2); color: #fff; border-color: var(--accent2); }
+
+  /* PAYWALL */
+  .paywall {
+    margin-top: 1.5rem;
+    border: 1.5px dashed var(--border);
+    border-radius: 14px;
+    padding: 1.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .paywall::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 0%, var(--card) 80%);
+    pointer-events: none;
+  }
+  .paywall-lock {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+  }
+  .paywall-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .paywall-desc {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 1.2rem;
+    max-width: 340px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .paywall-btn {
+    display: inline-block;
+    padding: 12px 28px;
+    background: var(--ink);
+    color: #fff;
+    border: none;
+    border-radius: 99px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    letter-spacing: -0.2px;
+    transition: opacity 0.15s;
+  }
+  .paywall-btn:hover { opacity: 0.85; }
+  .paywall-price {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+
+  /* BLURRED POSTS */
+  .blurred { filter: blur(5px); pointer-events: none; user-select: none; }
+
+  /* ERROR */
+  .error-msg {
+    background: #fff5f5;
+    border: 1px solid #fecaca;
+    border-radius: 10px;
+    padding: 12px 16px;
+    color: #991b1b;
+    font-size: 13px;
+    margin-top: 1rem;
+    display: none;
+  }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--muted);
+    font-size: 12px;
+    border-top: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Chapp<span>r</span></div>
+  <div class="nav-badge">Chappr Beta</div>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">AI Social Posts for Indian Businesses</div>
+  <h1>Your shop. Your story.<br><em>Posted every week.</em></h1>
+  <p>Answer 4 questions. Get a full week of ready-to-post content for Instagram, WhatsApp & Facebook. No agency. No stress.</p>
+</div>
+
+<div class="generator">
+  <div class="card">
+    <div class="card-header">
+      <div class="step-dot">1</div>
+      <h2>Tell us about your business</h2>
+    </div>
+    <div class="card-body">
+      <div class="form-grid">
+        <div class="field">
+          <label>Business name</label>
+          <input type="text" id="bizName" placeholder="e.g. Sharma Hair Studio" />
+        </div>
+        <div class="field">
+          <label>Type of business</label>
+          <select id="bizType">
+            <option value="">Select...</option>
+            <option>Salon / Barbershop</option>
+            <option>Restaurant / Dhaba</option>
+            <option>Gym / Fitness Studio</option>
+            <option>Clothing Store</option>
+            <option>Medical Clinic / Doctor</option>
+            <option>Coaching / Tuition Centre</option>
+            <option>Grocery / Kirana Store</option>
+            <option>Jewellery Shop</option>
+            <option>Electronics Shop</option>
+            <option>Real Estate / Property</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>City / Location</label>
+          <input type="text" id="bizCity" placeholder="e.g. Lajpat Nagar, Delhi" />
+        </div>
+        <div class="field">
+          <label>Tone</label>
+          <select id="bizTone">
+            <option value="friendly and warm">Friendly & Warm</option>
+            <option value="professional and trusted">Professional & Trusted</option>
+            <option value="fun and energetic">Fun & Energetic</option>
+            <option value="premium and aspirational">Premium & Aspirational</option>
+          </select>
+        </div>
+        <div class="field full">
+          <label>Any offer or highlight this week? (optional)</label>
+          <textarea id="bizOffer" placeholder="e.g. 20% off all haircuts this Sunday, or we just got new stock of summer kurtas, or Eid special thali for ₹149..."></textarea>
+        </div>
+        <div class="field full">
+          <label>Post for which platforms?</label>
+          <div class="platform-row" id="platformRow">
+            <div class="platform-pill active" data-platform="Instagram">📸 Instagram</div>
+            <div class="platform-pill active" data-platform="WhatsApp">💬 WhatsApp</div>
+            <div class="platform-pill" data-platform="Facebook">👍 Facebook</div>
+          </div>
+        </div>
+      </div>
+
+      <button class="generate-btn" id="generateBtn" onclick="generateContent()">
+        <span id="btnText">✦ Generate This Week's Posts</span>
+        <div class="spinner" id="spinner"></div>
+      </button>
+      <div class="error-msg" id="errorMsg"></div>
+    </div>
+  </div>
+
+  <div id="output">
+    <div class="output-header">
+      <div class="output-title">Your posts are ready 🎉</div>
+      <div class="week-badge">Week of <span id="weekLabel"></span></div>
+    </div>
+    <div class="post-cards" id="postCards"></div>
+
+    <div class="paywall">
+      <div class="blurred">
+        <div class="post-card" style="margin-bottom:10px;">
+          <div class="post-card-top"><div class="post-day">Thursday</div><div class="post-platform-badge badge-whatsapp">WhatsApp</div></div>
+          <div class="post-content">🌟 Namaskar! Thursday special at our shop — book before 6pm and get a free head massage with any service. Limited slots only! Call now: XXXXXXXX 📞 #Delhi #Salon</div>
+        </div>
+        <div class="post-card">
+          <div class="post-card-top"><div class="post-day">Saturday</div><div class="post-platform-badge badge-instagram">Instagram</div></div>
+          <div class="post-content">Weekend ready? ✨ Walk in or book your slot for the best [service] in [city]. Tag a friend who needs a glow-up! 👇 #Weekend #[City] #[Business]</div>
+        </div>
+      </div>
+      <div style="position:relative;z-index:1;">
+        <div class="paywall-lock">🔒</div>
+        <div class="paywall-title">Get all 7 days of posts</div>
+        <div class="paywall-desc">Free plan gives you 3 posts. Upgrade to get the full week, every week — plus caption variants & reel scripts.</div>
+        <button class="paywall-btn">Upgrade for ₹999/month</button>
+        <div class="paywall-price">Cancel anytime · Used by 200+ businesses in Delhi NCR</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Chappr — AI-powered social posts for Indian businesses · Made with ❤️ in India
+</footer>
+
+<script>
+const platforms = document.querySelectorAll('.platform-pill');
+platforms.forEach(p => {
+  p.addEventListener('click', () => p.classList.toggle('active'));
+});
+
+function getWeekLabel() {
+  const now = new Date();
+  const options = { month: 'short', day: 'numeric' };
+  const start = now.toLocaleDateString('en-IN', options);
+  const end = new Date(now.getTime() + 6*86400000).toLocaleDateString('en-IN', options);
+  return `${start} – ${end}`;
+}
+
+function getPlatformBadgeClass(platform) {
+  if (platform === 'Instagram') return 'badge-instagram';
+  if (platform === 'WhatsApp') return 'badge-whatsapp';
+  return 'badge-facebook';
+}
+
+function getSelectedPlatforms() {
+  return [...document.querySelectorAll('.platform-pill.active')].map(p => p.dataset.platform);
+}
+
+function renderPosts(posts) {
+  const container = document.getElementById('postCards');
+  container.innerHTML = '';
+  const days = ['Monday', 'Tuesday', 'Wednesday'];
+  posts.forEach((post, i) => {
+    const platforms = getSelectedPlatforms();
+    const platform = platforms[i % platforms.length] || 'Instagram';
+    const card = document.createElement('div');
+    card.className = 'post-card';
+    card.innerHTML = `
+      <div class="post-card-top">
+        <div class="post-day">${days[i]}</div>
+        <div class="post-platform-badge ${getPlatformBadgeClass(platform)}">${platform}</div>
+      </div>
+      <div class="post-content">${escapeHtml(post)}</div>
+      <div class="post-footer">
+        <button class="copy-btn" onclick="copyPost(this, ${i})">Copy</button>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function escapeHtml(text) {
+  return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function copyPost(btn, idx) {
+  const content = document.querySelectorAll('.post-content')[idx].textContent;
+  navigator.clipboard.writeText(content).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+async function generateContent() {
+  const bizName = document.getElementById('bizName').value.trim();
+  const bizType = document.getElementById('bizType').value;
+  const bizCity = document.getElementById('bizCity').value.trim();
+  const bizTone = document.getElementById('bizTone').value;
+  const bizOffer = document.getElementById('bizOffer').value.trim();
+  const platforms = getSelectedPlatforms();
+
+  const errorEl = document.getElementById('errorMsg');
+  errorEl.style.display = 'none';
+
+  if (!bizName || !bizType || !bizCity) {
+    errorEl.textContent = 'Please fill in your business name, type, and city.';
+    errorEl.style.display = 'block';
+    return;
+  }
+  if (platforms.length === 0) {
+    errorEl.textContent = 'Please select at least one platform.';
+    errorEl.style.display = 'block';
+    return;
+  }
+
+  const btn = document.getElementById('generateBtn');
+  const btnText = document.getElementById('btnText');
+  const spinner = document.getElementById('spinner');
+  btn.disabled = true;
+  btnText.textContent = 'Generating...';
+  spinner.style.display = 'block';
+
+  const platformList = platforms.join(', ');
+  const offerLine = bizOffer ? `This week's special highlight: ${bizOffer}.` : 'No specific offer this week — focus on building trust and engagement.';
+
+  const prompt = `You are a social media expert for Indian small businesses. Create exactly 3 ready-to-post social media captions for the following business.
+
+Business: ${bizName}
+Type: ${bizType}
+Location: ${bizCity}
+Tone: ${bizTone}
+Platforms: ${platformList}
+${offerLine}
+
+Rules:
+- Each post must be complete and ready to copy-paste
+- Use emojis naturally (not excessively)
+- Include 3-5 relevant hashtags at the end of each post
+- Mix post types: one promotional, one value/tip, one engagement/question
+- Write in a mix of English and simple Hinglish where natural
+- Keep each post under 150 words
+- Make them feel genuinely local and human, not corporate
+
+Return ONLY a JSON array of 3 strings, each string being one complete post caption. No explanation, no markdown, no labels. Just the raw JSON array.`;
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    const data = await response.json();
+    const raw = data.content.map(b => b.text || '').join('');
+    const clean = raw.replace(/```json|```/g, '').trim();
+    const posts = JSON.parse(clean);
+
+    document.getElementById('weekLabel').textContent = getWeekLabel();
+    renderPosts(posts);
+    document.getElementById('output').style.display = 'block';
+    document.getElementById('output').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  } catch (err) {
+    errorEl.textContent = 'Something went wrong generating your posts. Please try again.';
+    errorEl.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btnText.textContent = '✦ Generate This Week\'s Posts';
+    spinner.style.display = 'none';
+  }
+}
+</script>
+</body>
+</html>
